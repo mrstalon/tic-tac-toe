@@ -1,0 +1,16 @@
+.game-field {
+    margin-top: 5px !important;
+    width: 600px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.field-row {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+}
