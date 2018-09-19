@@ -5,28 +5,26 @@ import './index.css';
 
 
 class Square extends Component {
-    constructor(props) {
-        super(props);
-    }
     render () {
-        if (this.props.isCrossPlaced) {
+        if (this.props.isCrossPutted) {
             return (
-                <div className="game-square">
+                <div className="game-square" onClick={this.props.handleClick}>
                     <img className="icon" src={crossImg} alt="sad"/>
                 </div>
             );
-        } else if (this.props.isZeroPlaced) {
+        } else if (this.props.isZeroPutted) {
             return (
-                <div className="game-square" alt="sad">
-                    <img className="icon" src={zeroImg} />
+                <div className="game-square" alt="sad" onClick={this.props.handleClick}>
+                    <img className="icon" src={zeroImg} alt="sad" />
+                </div>
+            );
+        } else {
+            return (
+                <div className="game-square" onClick={this.props.handleClick}>
+
                 </div>
             );
         }
-        return (
-            <div className="game-square">
-
-            </div>
-        );
     }
 }
 
