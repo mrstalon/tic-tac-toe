@@ -18,6 +18,7 @@ class GameField extends Component {
                 isCrossPutted: false,
                 isZeroPutted: false,
                 value: null,
+                id: i,
             }
         }
         this.setState({
@@ -122,7 +123,7 @@ class GameField extends Component {
                             handleClick={() => this.putCrossOrZero(index)}
                             isCrossPutted={this.state.gameSquares[index].isCrossPutted}
                             isZeroPutted={this.state.gameSquares[index].isZeroPutted}
-                            key={index}
+                            key={square.id}
                         />
                     );
                 })}
