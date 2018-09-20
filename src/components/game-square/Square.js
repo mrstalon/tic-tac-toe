@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import crossImg from './crossed-bones.png';
 import zeroImg from './bat-mask.png';
+import PropTypes from 'prop-types';
 import './index.css';
 
 
@@ -26,6 +27,12 @@ class Square extends Component {
             );
         }
     }
+}
+
+PropTypes.Square = {
+    handleClick: PropTypes.func,
+    isCrossPutted: PropTypes.bool,
+    isZeroPutted: PropTypes.bool,
 }
 
 export default Square;
