@@ -29,7 +29,7 @@ class Square extends Component {
     }
 }
 
-PropTypes.Square = {
+Square.propTypes = {
     handleClick: PropTypes.func,
     isCrossPutted: PropTypes.bool,
     isZeroPutted: PropTypes.bool,

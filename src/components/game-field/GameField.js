@@ -131,10 +131,10 @@ class GameField extends Component {
     }
 }
 
-PropTypes.GameField = {
-    crossTurn: PropTypes.func,
+GameField.propTypes = {
+    crossTurn: PropTypes.bool,
     zeroTurn: PropTypes.bool,
-    changeTurn: PropTypes.bool,
+    changeTurn: PropTypes.func,
     endGame: PropTypes.func,
     isGameEnded: PropTypes.bool,
     isNewGameStarting: PropTypes.bool,
