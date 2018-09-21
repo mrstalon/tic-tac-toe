@@ -11,25 +11,16 @@ class App extends Component {
     winner: null,
     isNewGameStarting: false,
   }
-  changeTurn = this.changeTurn.bind(this);
-  endGame = this.endGame.bind(this);
-  startNewGame = this.startNewGame.bind(this);
-  newGameIsStarted = this.newGameIsStarted.bind(this);
 
-  changeTurn(crossTurn, zeroTurn) {
-    this.setState((state) => {
-      state.crossTurn = !crossTurn;
-      state.zeroTurn = !zeroTurn;
-      if (state.crossTurn) {
-        state.turnText = 'Ходят крестики';
-      } else {
-        state.turnText = 'Ходят нолики';
-      }
-      return state;
-    });
+  changeTurn = (crossTurnLocal, zeroTurnLocal) => {
+    this.setState(() => ({
+      crossTurn: !crossTurnLocal,
+      zeroTurn: !zeroTurnLocal,
+      turnText: !crossTurnLocal ? 'Ходят крестики' : 'Ходят нолики',
+    }));
   }
 
-  endGame(winner) {
+  endGame = (winner) => {
     this.setState((state) => {
       state.isGameEnded = true;
       state.winner = winner;
@@ -37,8 +28,8 @@ class App extends Component {
     });
   }
 
-  startNewGame() {
-    this.setState((state) => ({
+  startNewGame = () => {
+    this.setState(() => ({
       isNewGameStarting: true,
       isGameEnded: false,
       winner: null,
@@ -48,7 +39,7 @@ class App extends Component {
     }));
   }
 
-  newGameIsStarted() {
+  newGameIsStarted = () => {
     this.setState(() => ({
       isNewGameStarting: false,
     }));

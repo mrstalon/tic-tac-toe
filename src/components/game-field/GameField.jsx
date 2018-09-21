@@ -1,87 +1,66 @@
 import React, { Component } from 'react';
 import './index.css';
-import Square from '../game-square/Square.js';
+import Square from '../game-square/Square';
 import PropTypes from 'prop-types';
+import isZeroPutted from '../../helpers/isZeroPutted';
+import isCrossPutted from '../../helpers/isCrossPutted';
 
 class GameField extends Component {
     state = {
-        gameSquares: [],
+        gameSquares: new Array(9).fill({
+            value: null,
+        }),
     }
 
-    putCrossOrZero = this.putCrossOrZero.bind(this);
-    isGameEnded = this.isGameEnded.bind(this);
-
-    componentWillMount() {
-        let gameField = [];
-        for (let i = 0; i < 9; i++) {
-            gameField[i] = {
-                isCrossPutted: false,
-                isZeroPutted: false,
-                value: null,
-                id: i,
-            }
+    componentDidUpdate() {
+        if (this.props.isNewGameStarting) {
+            this.setState((state) => ({
+                    gameSquares: state.gameSquares.map((square) => {
+                        return {
+                            value: null,
+                        };
+                    }),
+            }));
+            this.props.newGameIsStarted();
         }
-        this.setState({
-            gameSquares: gameField,
-        });
     }
 
-    componentWillUpdate() {
-        // when isNewGameStarting changing at parent
-        // it should lead to gameSquare array updating
-        // but if we remove setTimeout, isNewGameStarting won't update instantly here in props
-        setTimeout(() => {
-            if (this.props.isNewGameStarting) {
-                this.setState((state) => ({
-                        gameSquares: state.gameSquares.map((square) => {
-                            return {
-                                value: null,
-                                isCrossPutted: false,
-                                isZeroPutted: false,
-                            };
-                        }),
-                }));
-                this.props.newGameIsStarted();
-            }
-        }, 0);
-    }
-
-    putCrossOrZero(id) {
-        if (this.props.isGameEnded) {
+    putCrossOrZero = (id) => {
+        const { isGameEnded, crossTurn, endGame, changeTurn, zeroTurn } = this.props;
+        const { gameSquares } = this.state;
+        if (isGameEnded) {
             return;
         }
 
-        if (this.state.gameSquares[id].isCrossPutted || this.state.gameSquares[id].isZeroPutted) {
+        if (isCrossPutted(gameSquares, id) || isZeroPutted(gameSquares, id)) {
             return;
         }
 
         let gameSquaresCopy = JSON.parse(JSON.stringify(this.state.gameSquares));
-        if (this.props.crossTurn) {
-            gameSquaresCopy[id].isCrossPutted = true;
+        if (crossTurn) {
             gameSquaresCopy[id].value = 'x';
 
             this.setState(() => ({
                 gameSquares: gameSquaresCopy,
             }));
 
-            if (this.isGameEnded('x', gameSquaresCopy)) {
-                this.props.endGame('крестики');
+            if (this.checkIsGameEnded('x', gameSquaresCopy)) {
+                endGame('крестики');
             }
-        } else if (this.props.zeroTurn) {
-            gameSquaresCopy[id].isZeroPutted = true;
+        } else if (zeroTurn) {
             gameSquaresCopy[id].value = 'о';
 
             this.setState(() => ({
                 gameSquares: gameSquaresCopy,
             }));
 
-            if (this.isGameEnded('о', gameSquaresCopy)) {
-                this.props.endGame('нолики');
+            if (this.checkIsGameEnded('о', gameSquaresCopy)) {
+                endGame('нолики');
             }
         }
-        this.props.changeTurn(this.props.crossTurn, this.props.zeroTurn);
+        changeTurn(crossTurn, zeroTurn);
     }
-    isGameEnded(symbol, gameField) {
+    checkIsGameEnded = (symbol, gameField) => {
         const field = [[], [], []];
         gameField.slice().forEach((cell, index) => {
             if (index < 3) {
@@ -114,6 +93,7 @@ class GameField extends Component {
             return false;
         }
     }
+
     render() {
         return (
             <div className="game-field">
@@ -121,9 +101,9 @@ class GameField extends Component {
                     return (
                         <Square
                             handleClick={() => this.putCrossOrZero(index)}
-                            isCrossPutted={this.state.gameSquares[index].isCrossPutted}
-                            isZeroPutted={this.state.gameSquares[index].isZeroPutted}
-                            key={square.id}
+                            isCrossPutted={isCrossPutted(this.state.gameSquares, index)}
+                            isZeroPutted={isZeroPutted(this.state.gameSquares, index)}
+                            key={index}
                         />
                     );
                 })}
